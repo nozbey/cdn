@@ -335,7 +335,7 @@ async function tT() {
     } catch (error) {
         console.error("Error:", error);
         rsp.innerText = "Error: " + error.message;
-        document.getElementById("tTri").checked = false;
+        document.getElementById("tTri").checked = true;
     }
 };
 async function tR() {
