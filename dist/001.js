@@ -1,40 +1,60 @@
 var gridView = document.querySelector('.grid-view');
 var graphView = document.querySelector('.graph');
 var controlView = document.querySelector('.control');
+var calibrateView = document.querySelector('.calibrate');
 var statusType = document.querySelector('.status-type');
 
 var sensorBoxes = document.querySelector('.sensor-boxes');
 var graphArea = document.querySelector('.graph-area');
 var controlArea = document.querySelector('.control-area');
+var calibrateArea = document.querySelector('.calibrate-area');
 
 gridView.addEventListener('click', function () {
     gridView.classList.add('active');
     graphView.classList.remove('active');
     controlView.classList.remove('active');
+    calibrateView.classList.remove('active');
     statusType.textContent = 'SENSOR VALUES';
     sensorBoxes.style.display = 'flex';
     graphArea.style.display = 'none';
     controlArea.style.display = 'none';
+    calibrateArea.style.display = 'none';
 });
 
 graphView.addEventListener('click', function () {
     graphView.classList.add('active');
     gridView.classList.remove('active');
     controlView.classList.remove('active');
+    calibrateView.classList.remove('active');
     statusType.textContent = 'GRAPH OF SENSORs';
     sensorBoxes.style.display = 'none';
     graphArea.style.display = 'flex';
     controlArea.style.display = 'none';
+    calibrateArea.style.display = 'none';
 });
 
 controlView.addEventListener('click', function () {
     controlView.classList.add('active');
     gridView.classList.remove('active');
     graphView.classList.remove('active');
+    calibrateView.classList.remove('active');
     statusType.textContent = 'CONTROL DEVICE';
     sensorBoxes.style.display = 'none';
     graphArea.style.display = 'none';
     controlArea.style.display = 'flex';
+    calibrateArea.style.display = 'none';
+});
+
+calibrateView.addEventListener('click', function () {
+    calibrateView.classList.add('active');
+    gridView.classList.remove('active');
+    graphView.classList.remove('active');
+    controlView.classList.remove('active');
+    statusType.textContent = 'CALIBRATE DEVICE';
+    calibrateArea.style.display = 'flex';
+    sensorBoxes.style.display = 'none';
+    graphArea.style.display = 'none';
+    controlArea.style.display = 'none';
 });
 
 const canvas = document.getElementById('myChart');
