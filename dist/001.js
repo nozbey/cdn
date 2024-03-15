@@ -472,23 +472,15 @@ document.getElementById("reactivePower").addEventListener('input', function (e) 
 
 // get the value of the input fields and send it to the server
 function readReq() {
-    const jsonTemplate = document.getElementById("jsonTemplate").value;
-    fetch("/readcalibrationregisters", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: jsonTemplate
-    })
-        .then(response => response.text())
+    fetch("/readcalibrationregisters")
+        .then(response => response.json())
         .then(data => {
             console.log(data);
-            rsp.innerText = data.replace(/(\r\n|\n|\r)/gm, "");
-            const obj = JSON.parse(data); 
-            document.getElementById("vRead").value = obj.V;
-            document.getElementById("iRead").value = obj.I;
-            document.getElementById("apRead").value = obj.AP;
-            document.getElementById("rpRead").value = obj.RP;
+            rsp.innerText = JSON.stringify(data).replace(/(\r\n|\n|\r)/gm, "");
+            document.getElementById("vRead").value = data.V;
+            document.getElementById("iRead").value = data.I;
+            document.getElementById("apRead").value = data.AP;
+            document.getElementById("rpRead").value = data.RP;
             // change dot color to idle color
             for (let i = 0; i < dots.length; i++) {
                 dots[i].style.backgroundColor = '#bbb';
@@ -498,5 +490,9 @@ function readReq() {
         .catch(error => {
             console.error("Error:", error);
             rsp.innerText = "Error: " + error.message;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].style.backgroundColor = '#bbb';
+                dots[i].style.boxShadow = '0 0 10px #969696';
+            }
         });
 }
