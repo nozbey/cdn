@@ -3,6 +3,7 @@ var graphView = document.querySelector('.graph');
 var controlView = document.querySelector('.control');
 var calibrateView = document.querySelector('.calibrate');
 var statusType = document.querySelector('.status-type');
+var footer = document.querySelector('.footer');
 
 var sensorBoxes = document.querySelector('.sensor-boxes');
 var graphArea = document.querySelector('.graph-area');
@@ -19,6 +20,7 @@ gridView.addEventListener('click', function () {
     graphArea.style.display = 'none';
     controlArea.style.display = 'none';
     calibrateArea.style.display = 'none';
+    footer.style.display = 'none';
 });
 
 graphView.addEventListener('click', function () {
@@ -31,6 +33,7 @@ graphView.addEventListener('click', function () {
     graphArea.style.display = 'flex';
     controlArea.style.display = 'none';
     calibrateArea.style.display = 'none';
+    footer.style.display = 'none';
 });
 
 controlView.addEventListener('click', function () {
@@ -43,6 +46,7 @@ controlView.addEventListener('click', function () {
     graphArea.style.display = 'none';
     controlArea.style.display = 'flex';
     calibrateArea.style.display = 'none';
+    footer.style.display = 'flex';
 });
 
 calibrateView.addEventListener('click', function () {
@@ -55,6 +59,7 @@ calibrateView.addEventListener('click', function () {
     sensorBoxes.style.display = 'none';
     graphArea.style.display = 'none';
     controlArea.style.display = 'none';
+    footer.style.display = 'flex';
 });
 
 const canvas = document.getElementById('myChart');
@@ -266,7 +271,7 @@ setInterval(() => {
         const newLabel = pad(curDate.getHours()) + ":" + pad(curDate.getMinutes()) + ":" + pad(curDate.getSeconds());
         addData(myChart, newLabel, data.Vrms, data.Irms, data["Active Power"]);
     });
-}, 1000);
+}, 100000);
 
 fetch('/doraid')
     .then(response => {
@@ -308,7 +313,7 @@ const observer = new MutationObserver(mutationsList => {
                 const newFontSize = 20 * scaleFactor;
                 rsp.style.fontSize = newFontSize + 'px';
             } else {
-                rsp.style.fontSize = '16px';
+                rsp.style.fontSize = '14px';
             }
         }
     }
@@ -389,3 +394,60 @@ function sendJson() {
             rsp.innerText = "Error: " + error.message;
         });
 }
+// calibrate function gets the value of the input fields and sends it to the server to calibrate the device with json post { "V": 2200, "I": 745,"AP": 733,"RP": 8}
+function calibrate() {
+    const voltage = document.getElementById("voltage").value;
+    const current = document.getElementById("current").value;
+    const activePower = document.getElementById("activePower").value;
+    const reactivePower = document.getElementById("reactivePower").value;
+    const jsonTemplate = { "V": voltage, "I": current, "AP": activePower, "RP": reactivePower };
+    fetch("https://run.mocky.io/v3/48fe2c33-afd1-43c6-8a6a-f7bd0a1af4fc", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jsonTemplate)
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            rsp.innerText = data.replace(/(\r\n|\n|\r)/gm, "");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            rsp.innerText = "Error: " + error.message;
+        });
+}
+
+
+// control input fields validation function
+document.getElementById("voltage").addEventListener('input', function (e) {
+    if (this.checkValidity()) {
+        prevVal = this.value;
+    } else {
+        this.value = prevVal;
+    }
+});
+document.getElementById("current").addEventListener('input', function (e) {
+    if (this.checkValidity()) {
+        prevVal = this.value;
+    } else {
+        this.value = prevVal;
+    }
+});
+document.getElementById("activePower").addEventListener('input', function (e) {
+    if (this.checkValidity()) {
+        prevVal = this.value;
+    } else {
+        this.value = prevVal;
+    }
+}
+);
+document.getElementById("reactivePower").addEventListener('input', function (e) {
+    if (this.checkValidity()) {
+        prevVal = this.value;
+    } else {
+        this.value = prevVal;
+    }
+}
+);

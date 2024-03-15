@@ -291,6 +291,65 @@
   font-size: 20px;
 }
 
+.cReg {
+  width: 130px;
+  height: 30px;
+  font-size: large;
+  text-align: left;
+  padding: 8px 0px;
+}
+
+.rReg {
+  width: 70px;
+  height: 28px;
+  font-size: large;
+  font-weight: 600;
+  text-align: end;
+  padding-right: 8px;
+}
+
+.wReg {
+  width: 70px;
+  height: 28px;
+  font-size: large;
+  font-weight: 600;
+  text-align: end;
+  padding-right: 8px;
+}
+
+.calibrate-box-body-item {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-around;
+  margin-bottom: 13px;
+}
+
+.calibrate-box-body-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.calibrate-box-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.cal-header {
+  font-size: 15px;
+  line-height: 32px;
+  font-weight: 700;
+  opacity: 0.9;
+  margin: 0;
+  color: #1f1c2e;
+}
+
 @media screen and (max-width: 980px) {
   .sensor-box-wrapper {
     width: 48%;
@@ -301,6 +360,15 @@
     width: 100%;
   }
 
+}
+
+@media screen and (min-width: 520px) {
+  .calibrate-box-body {
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
 }
 
 @media screen and (max-width: 520px) {
