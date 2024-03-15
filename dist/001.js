@@ -271,7 +271,7 @@ setInterval(() => {
         const newLabel = pad(curDate.getHours()) + ":" + pad(curDate.getMinutes()) + ":" + pad(curDate.getSeconds());
         addData(myChart, newLabel, data.Vrms, data.Irms, data["Active Power"]);
     });
-}, 100000);
+}, 1000);
 
 fetch('/doraid')
     .then(response => {
