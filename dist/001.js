@@ -394,6 +394,9 @@ function sendJson() {
             rsp.innerText = "Error: " + error.message;
         });
 }
+// Calibrate function
+const dots = document.querySelectorAll('.dot');
+
 // calibrate function gets the value of the input fields and sends it to the server to calibrate the device with json post { "V": 2200, "I": 745,"AP": 733,"RP": 8}
 function calibrate() {
     const voltage = document.getElementById("voltage").value;
@@ -401,7 +404,7 @@ function calibrate() {
     const activePower = document.getElementById("activePower").value;
     const reactivePower = document.getElementById("reactivePower").value;
     const jsonTemplate = { "V": voltage, "I": current, "AP": activePower, "RP": reactivePower };
-    fetch("https://run.mocky.io/v3/48fe2c33-afd1-43c6-8a6a-f7bd0a1af4fc", {
+    fetch("/writecalibrationregisters", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -412,13 +415,27 @@ function calibrate() {
         .then(data => {
             console.log(data);
             rsp.innerText = data.replace(/(\r\n|\n|\r)/gm, "");
+            // parse json response data and check every element of the object and change the color of the dot color animate 300ms interval
+            const obj = JSON.parse(data);
+            const keys = Object.keys(obj);
+
+            for (let i = 0; i < keys.length; i++) {
+                setTimeout(() => {
+                    if (obj[keys[i]] == 6) {
+                        dots[i].style.backgroundColor = '#00cd00';
+                        dots[i].style.boxShadow = 'rgb(12 255 55) 0px 0px 6px 2px, rgb(0 255 116) 0px 0px 16px 4px';
+                    } else {
+                        dots[i].style.backgroundColor = 'red';
+                        dots[i].style.boxShadow = '#fd0d0d 0px 0px 6px 2px, #ff000a 0px 0px 16px 4px';
+                    }
+                }, i * 500); // Add a delay of 500ms between each color change
+            }
         })
         .catch(error => {
             console.error("Error:", error);
             rsp.innerText = "Error: " + error.message;
         });
 }
-
 
 // control input fields validation function
 document.getElementById("voltage").addEventListener('input', function (e) {
@@ -451,3 +468,35 @@ document.getElementById("reactivePower").addEventListener('input', function (e) 
     }
 }
 );
+
+
+// get the value of the input fields and send it to the server
+function readReq() {
+    const jsonTemplate = document.getElementById("jsonTemplate").value;
+    fetch("/readcalibrationregisters", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: jsonTemplate
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            rsp.innerText = data.replace(/(\r\n|\n|\r)/gm, "");
+            const obj = JSON.parse(data); 
+            document.getElementById("vRead").value = obj.V;
+            document.getElementById("iRead").value = obj.I;
+            document.getElementById("apRead").value = obj.AP;
+            document.getElementById("rpRead").value = obj.RP;
+            // change dot color to idle color
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].style.backgroundColor = '#bbb';
+                dots[i].style.boxShadow = '0 0 10px #969696';
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            rsp.innerText = "Error: " + error.message;
+        });
+}
